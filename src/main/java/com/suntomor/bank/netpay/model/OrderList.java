@@ -183,7 +183,7 @@ public class OrderList implements Serializable {
 	}
 
 	/**
-	 * @return t_order_list.PRODUCT_NAME 缴款类型名称
+	 * @return t_order_list.PROJECT_NAME 缴款类型名称
 	 */
 	public String getOrderTypeName() {
 		return orderTypeName;
@@ -191,7 +191,7 @@ public class OrderList implements Serializable {
 
 	/**
 	 * @param orderTypeName
-	 *            the value for t_order_list.PRODUCT_NAME 缴款类型名称
+	 *            the value for t_order_list.PROJECT_NAME 缴款类型名称
 	 */
 	public void setOrderTypeName(String orderTypeName) {
 		this.orderTypeName = orderTypeName;

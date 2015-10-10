@@ -34,7 +34,7 @@
 		useGeneratedKeys="true" keyProperty="id">
 		insert into t_order_list (
 			c_bank_type, c_order_number, c_total_money, c_business_id, c_order_type, c_payer_name,
-			c_mobile_no, c_idcard_number, c_pay_time, c_ip_address, product_name, 
+			c_mobile_no, c_idcard_number, c_pay_time, c_ip_address, project_name, 
 			c_status, c_serial_number, c_is_wap, c_create_time, c_modify_time
 		) values (
 			#{bankType, jdbcType=VARCHAR}, #{orderNumber, jdbcType=VARCHAR}, #{totalMoney, jdbcType=DOUBLE},
@@ -61,7 +61,7 @@
 			c_serial_number = #{serialNumber, jdbcType=VARCHAR},
 			c_is_wap = #{wap, jdbcType=TINYINT},
 			c_modify_time = #{modifyTime, jdbcType=TIMESTAMP},
-			product_name = #{orderTypeName, jdbcType=VARCHAR}
+			project_name = #{orderTypeName, jdbcType=VARCHAR}
 		where c_id = #{id, jdbcType=INTEGER}
 	</update>
 	
