@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.suntomor.bank.checking.model.AccountStatementMapper">
+	<resultMap id="BaseResultMap" type="com.suntomor.bank.checking.model.AccountStatement">
+		<id column="c_id" property="id" jdbcType="INTEGER" />
+		<result column="c_bank_type" property="bankType" jdbcType="VARCHAR" />
+		<result column="c_order_id" property="orderId" jdbcType="INTEGER" />
+		<result column="c_order_number" property="orderNumber" jdbcType="VARCHAR" />
+		<result column="c_business_id" property="businessId" jdbcType="INTEGER" />
+		<result column="c_payer_name" property="payerName" jdbcType="VARCHAR" />
+		<result column="c_payer_account" property="payerAccount" jdbcType="VARCHAR" />
+		<result column="c_pay_time" property="payTime" jdbcType="TIMESTAMP" />
+		<result column="c_reconciliation_time" property="reconciliationTime" jdbcType="TIMESTAMP" />
+		<result column="c_total_money" property="totalMoney" jdbcType="DOUBLE" />
+		<result column="c_fund_source" property="fundSource" jdbcType="VARCHAR" />
+		<result column="c_serial_number" property="serialNumber" jdbcType="VARCHAR" />
+		<result column="c_create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<select id="queryByParameter" parameterType="hashmap" resultMap="BaseResultMap">
+		select distinct t.* from t_account_statement t
+		<where>
+			<if test="orderNumber != null">and t.c_order_number = #{orderNumber, jdbcType=VARCHAR}</if>
+		</where>
+		order by t.c_id desc
+	</select>
+	
+	<insert id="insertByEntity" parameterType="com.suntomor.bank.checking.model.AccountStatement"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into t_account_statement (
+			C_BANK_TYPE, C_ORDER_ID, C_ORDER_NUMBER, C_BUSINESS_ID, C_PAYER_NAME,
+			C_PAYER_ACCOUNT, C_PAY_TIME, C_RECONCILIATION_TIME,
+			C_TOTAL_MONEY, C_FUND_SOURCE, C_SERIAL_NUMBER,C_CREATE_TIME
+		) values (
+			#{bankType,jdbcType=VARCHAR}, #{orderId,jdbcType=INTEGER},
+			#{orderNumber,jdbcType=VARCHAR}, #{businessId,jdbcType=INTEGER}, #{payerName,jdbcType=VARCHAR},
+			#{payerAccount,jdbcType=VARCHAR}, #{payTime,jdbcType=TIMESTAMP}, #{reconciliationTime,jdbcType=TIMESTAMP},
+			#{totalMoney,jdbcType=DOUBLE}, #{fundSource,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+</mapper>

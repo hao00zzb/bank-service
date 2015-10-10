@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.suntomor.bank.netpay.model.OrderListMapper">
+	<resultMap id="BaseResultMap" type="com.suntomor.bank.netpay.model.OrderList">
+		<id column="C_ID" property="id" jdbcType="INTEGER" />
+		<result column="C_BANK_TYPE" property="bankType" jdbcType="VARCHAR" />
+		<result column="C_ORDER_NUMBER" property="orderNumber" jdbcType="VARCHAR" />
+		<result column="C_TOTAL_MONEY" property="totalMoney" jdbcType="DOUBLE" />
+		<result column="C_BUSINESS_ID" property="businessId" jdbcType="INTEGER" />
+		<result column="C_ORDER_TYPE" property="orderType" jdbcType="INTEGER" />
+		<result column="C_PAYER_NAME" property="payerName" jdbcType="VARCHAR" />
+		<result column="C_MOBILE_NO" property="mobileNo" jdbcType="VARCHAR" />
+		<result column="C_IDCARD_NUMBER" property="idcardNumber" jdbcType="VARCHAR" />
+		<result column="C_PAY_TIME" property="payTime" jdbcType="TIMESTAMP" />
+		<result column="C_IP_ADDRESS" property="ipAddress" jdbcType="VARCHAR" />
+		<result column="C_STATUS" property="status" jdbcType="INTEGER" />
+		<result column="C_SERIAL_NUMBER" property="serialNumber" jdbcType="VARCHAR" />
+		<result column="C_IS_WAP" property="wap" jdbcType="TINYINT"/>
+		<result column="C_CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="C_MODIFY_TIME" property="modifyTime" jdbcType="TIMESTAMP" />
+		
+		<result column="project_name" property="orderTypeName" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<select id="queryByParameter" parameterType="hashmap" resultMap="BaseResultMap">
+		select * from t_order_list t 
+		<where>
+			<if test="orderNumber != null">and t.c_order_number = #{orderNumber, jdbcType=VARCHAR}</if>
+		</where>
+		order by t.c_id desc
+	</select>
+	
+	<insert id="insertByEntity" parameterType="com.suntomor.bank.netpay.model.OrderList"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into t_order_list (
+			c_bank_type, c_order_number, c_total_money, c_business_id, c_order_type, c_payer_name,
+			c_mobile_no, c_idcard_number, c_pay_time, c_ip_address, product_name, 
+			c_status, c_serial_number, c_is_wap, c_create_time, c_modify_time
+		) values (
+			#{bankType, jdbcType=VARCHAR}, #{orderNumber, jdbcType=VARCHAR}, #{totalMoney, jdbcType=DOUBLE},
+			#{businessId, jdbcType=INTEGER}, #{orderType, jdbcType=INTEGER}, #{payerName, jdbcType=VARCHAR},
+			#{mobileNo, jdbcType=VARCHAR}, #{idcardNumber, jdbcType=VARCHAR}, #{payTime, jdbcType=TIMESTAMP},
+			#{ipAddress, jdbcType=VARCHAR}, #{orderTypeName, jdbcType=VARCHAR}, #{status, jdbcType=INTEGER}, #{serialNumber, jdbcType=VARCHAR},
+			#{wap, jdbcType=TINYINT}, #{createTime, jdbcType=TIMESTAMP}, #{modifyTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="updateByEntity" parameterType="com.suntomor.bank.netpay.model.OrderList">
+		update t_order_list set
+			c_bank_type = #{bankType, jdbcType=VARCHAR}, 
+			c_order_number = #{orderNumber, jdbcType=VARCHAR}, 
+			c_total_money = #{totalMoney, jdbcType=DOUBLE}, 
+			c_business_id = #{businessId, jdbcType=INTEGER}, 
+			c_order_type = #{orderType, jdbcType=INTEGER},
+			c_payer_name = #{payerName, jdbcType=VARCHAR},
+			c_mobile_no = #{mobileNo, jdbcType=VARCHAR},
+			c_idcard_number = #{idcardNumber, jdbcType=VARCHAR},
+			c_pay_time = #{payTime, jdbcType=TIMESTAMP},
+			c_ip_address = #{ipAddress, jdbcType=VARCHAR},
+			c_status = #{status, jdbcType=INTEGER},
+			c_serial_number = #{serialNumber, jdbcType=VARCHAR},
+			c_is_wap = #{wap, jdbcType=TINYINT},
+			c_modify_time = #{modifyTime, jdbcType=TIMESTAMP},
+			product_name = #{orderTypeName, jdbcType=VARCHAR}
+		where c_id = #{id, jdbcType=INTEGER}
+	</update>
+	
+</mapper>

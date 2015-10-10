@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<contextName>BANK-SERVICE</contextName>
+	
+	<property name="log_home" value="/var/bank/log/" />
+	<property name="context_name" value="bank.service" />
+
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>[%contextName] %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log_home}/${context_name}.log</file>
+		<encoder>
+			<pattern>[%contextName] %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log_home}/_${context_name}.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<MaxHistory>30</MaxHistory>
+		</rollingPolicy>
+	</appender>
+	
+	<logger name="org.springframework.aop" level="error"/>
+	<logger name="org.springframework.core" level="error"/>
+	<logger name="org.springframework.beans" level="error"/>
+	<logger name="org.springframework.context" level="error"/>
+	<logger name="org.springframework.web" level="debug"/>
+	
+	<logger name="org.quartz.core" level="warn"/>
+	
+	<root level="trace">
+		<appender-ref ref="stdout" />
+		<appender-ref ref="file" />
+	</root>
+
+</configuration>
