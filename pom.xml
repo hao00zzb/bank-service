@@ -164,6 +164,54 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>bankcomm</groupId>
+			<artifactId>bankcomm</artifactId>
+			<version>1.3</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/bankcomm-1.3.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>bcmail-jdk14</groupId>
+			<artifactId>bcmail-jdk14</artifactId>
+			<version>1.4.6</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/bcmail-jdk14-146.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>bcprov-jdk14</groupId>
+			<artifactId>bcprov-jdk14</artifactId>
+			<version>1.4.6</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/bcprov-jdk14-146.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>ISFJ_v2_0_1_127_5_BAISC_JDK14</groupId>
+			<artifactId>ISFJ_v2_0_1_127_5_BAISC_JDK14</artifactId>
+			<version>1.4.6</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/ISFJ_v2_0_1_127_5_BAISC_JDK14.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>newnetsign18</groupId>
+			<artifactId>newnetsign18</artifactId>
+			<version>1.8</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/newnetsign18.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>TrustPayClient-V3.0.2</groupId>
+			<artifactId>TrustPayClient-V3.0.2</artifactId>
+			<version>3.0.2</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/TrustPayClient-V3.0.2.jar</systemPath>
+		</dependency>
 
 	</dependencies>
 	<build>
