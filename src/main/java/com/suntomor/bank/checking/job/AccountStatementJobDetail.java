@@ -1,9 +1,11 @@
 package com.suntomor.bank.checking.job;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.annotation.Resource;
 
@@ -13,8 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import com.suntomor.bank.checking.model.AccountStatement;
 import com.suntomor.bank.checking.service.IAccountStatementService;
-import com.suntomor.bank.netpay.helper.AbcBankHelper;
-import com.suntomor.bank.netpay.helper.BocomBankHelper;
 
 public class AccountStatementJobDetail {
 
@@ -24,60 +24,22 @@ public class AccountStatementJobDetail {
 	private static final Logger logger = LoggerFactory.getLogger(AccountStatementJobDetail.class);
 	
 	public void execute() {
+		ExecutorService executorService = Executors.newCachedThreadPool();
+		List<AccountStatement> accountStatements = new ArrayList<AccountStatement>();
 		try {
-			ExecutorService pool = Executors.newCachedThreadPool();
-			
 			Date checkDate = DateUtils.addDays(new Date(), -1);
-			Runnable abcThread = new CheckingABCBankStatement(checkDate);
-			pool.execute(abcThread);
+			Future<List<AccountStatement>> abcFuture = executorService.submit(new CheckingABCBankStatement(checkDate));
+			Future<List<AccountStatement>> bocomFuture = executorService.submit(new CheckingBocomBankStatement(checkDate));
 			
-			Runnable bocomThread = new CheckingBocomBankStatement(checkDate);
-			pool.execute(bocomThread);
+			accountStatements.addAll(abcFuture.get());
+			accountStatements.addAll(bocomFuture.get());
 			
-			//关闭线程池
-			pool.shutdown();
+			this.accountStatementService.saveOrUpdate(accountStatements, checkDate);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-		}
-		
-	}
-	
-	private class CheckingABCBankStatement implements Runnable {
-
-		private Date checkDate = null;
-		
-		public CheckingABCBankStatement(Date checkDate) {
-			this.checkDate = checkDate;
-		}
-
-		@Override
-		public void run() {
-			final AbcBankHelper abcHelper = AbcBankHelper.getInstance();
-			
-			List<AccountStatement> accountStatements = abcHelper.downloadSettle(checkDate);
-			if (accountStatements != null && !accountStatements.isEmpty()) {
-				accountStatementService.saveOrUpdate(accountStatements, checkDate);
-			}
-		}
-		
-	}
-	
-	private class CheckingBocomBankStatement implements Runnable {
-
-		private Date checkDate = null;
-		
-		public CheckingBocomBankStatement(Date checkDate) {
-			this.checkDate = checkDate;
-		}
-		
-		@Override
-		public void run() {
-			final BocomBankHelper bocomHelper = BocomBankHelper.getInstance();
-			
-			List<AccountStatement> accountStatements = bocomHelper.downloadSettle(checkDate);
-			if (accountStatements != null && !accountStatements.isEmpty()) {
-				accountStatementService.saveOrUpdate(accountStatements, checkDate);
-			}
+		} finally {
+			//关闭线程池
+			executorService.shutdown();
 		}
 		
 	}

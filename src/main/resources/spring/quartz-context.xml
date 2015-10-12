@@ -4,30 +4,43 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
-	<!-- 定时服务定义 -->
-	<bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="autoStartup">
-			<value>true</value>
-		</property>
-		<property name="triggers">
-			<list>
-				<!-- 下载对账单 -->
-				<ref local="accountStatementJobTrigger" />
-			</list>
-		</property>
-	</bean>
+	<beans>
+		<!-- 定时服务定义 -->
+		<bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+			<property name="autoStartup">
+				<value>true</value>
+			</property>
+			<property name="triggers">
+				<list>
+					<!-- 下载对账单 -->
+					<ref local="accountStatementJobTrigger" />
+				</list>
+			</property>
+		</bean>
+	
+		<bean id="accountStatementJob" class="com.suntomor.bank.checking.job.AccountStatementJobDetail" />
+		<bean id="accountStatementJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+			<property name="targetObject" ref="accountStatementJob" />
+			<property name="targetMethod" value="execute" />
+			<property name="concurrent" value="true" />
+		</bean>
+	</beans>
 
-	<bean id="accountStatementJob" class="com.suntomor.bank.checking.job.AccountStatementJobDetail" />
-	<bean id="accountStatementJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="accountStatementJob" />
-		<property name="targetMethod" value="execute" />
-		<property name="concurrent" value="true" />
-	</bean>
-	<bean id="accountStatementJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="accountStatementJobDetail" />
-		<property name="cronExpression">
-			<value>00 00 * * * ?</value>
-		</property>
-	</bean>
-
+	<beans profile="development">
+		<bean id="accountStatementJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+			<property name="jobDetail" ref="accountStatementJobDetail" />
+			<property name="cronExpression">
+				<value>00 00 */4 * * ?</value>
+			</property>
+		</bean>
+	</beans>
+	
+	<beans profile="production">
+		<bean id="accountStatementJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+			<property name="jobDetail" ref="accountStatementJobDetail" />
+			<property name="cronExpression">
+				<value>00 00 */4 * * ?</value>
+			</property>
+		</bean>
+	</beans>
 </beans>

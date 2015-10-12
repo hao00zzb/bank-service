@@ -33,6 +33,7 @@ public class HomeController {
 		model.addAttribute("serverTime", formattedDate);
 
 		model.addAttribute("orderNumber", System.currentTimeMillis());
+		model.addAttribute("orderDate", date);
 		
 		logger.info("session id is : {}.",session.getId());
 		

@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="utf-8"%>
-<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="tags" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -60,6 +64,7 @@
 	
 	<hr/>
 	<h1>人工对账</h1>
+	<span>提示信息：<span id="ctr_check_message" style="word-spacing: normal;width: 100%;word-break: break-word;"></span></span>
 	<form action="javascript:;" method="post" id="detailAccountForm">
 		<div style="margin: 5px">
 			<table style="width: 100%;border-collapse: 0;border-spacing: 0;">
@@ -75,14 +80,14 @@
 				<tr>
 					<td style="width: 140px;text-align: right;">查询日期：</td>
 					<td>
-						<input type="text" name="orderDate" style="width: 95%;" value="${orderDate }">
+						<input type="text" name="orderDate" style="width: 95%;" value='<fmt:formatDate value="${orderDate }" pattern="yyyy-MM-dd"/>'>
 					</td>
 				</tr>
 			</table>
 		</div>
 		<div style="margin: 0 5px;text-align: center;">
 			<div>
-				<button style="width: 120px;" type="submit" id="query">查询</button>
+				<button style="width: 120px;" type="button" id="download">下载</button>
 				<button style="width: 120px;" type="reset">重置</button>
 			</div>
 		</div>
@@ -93,6 +98,8 @@
 	<script type="text/javascript">
 		$(function(){
 			$('#payment').prop('disabled', true);
+			
+			$('#download').click(download);
 		});
 		
 		function makeOrder() {
@@ -100,23 +107,43 @@
 			$('#payment').prop('disabled', true);
 			var url = '${path}/order/make';
 			var data = {};
-			data.bankType = $('input[name="bankType"]:checked').val();
-			data.iswap = $('input[name="iswap"]:checked').val();
-			data.orderNumber = $('input[name="orderNumber"]').val();
-			data.totalMoney = $('input[name="amount"]').val();
+			data.bankType = $('#detailForm').find('input[name="bankType"]:checked').val();
+			data.iswap = $('#detailForm').find('input[name="iswap"]:checked').val();
+			data.orderNumber = $('#detailForm').find('input[name="orderNumber"]').val();
+			data.totalMoney = $('#detailForm').find('input[name="amount"]').val();
 			
 			$.post(url, data, function(json){
+				$('#payment').prop('disabled', false);
+				$('#makeorder').prop('disabled', true);
+				
 				if (!json.success) {
 					$('#message').html(json.msg);
 					return;
 				}
 				$('#message').html('订单生成成功!');
-				$('#payment').prop('disabled', false);
-				$('#makeorder').prop('disabled', true);
-				
 				var str = data.bankType + data.orderNumber + data.totalMoney + 'csey0512';
 				$('input[name="sign"]').val($.md5(str));
 				
+			}, 'json');
+		}
+		
+		function download(e) {
+			var _this = this;
+			$(_this).prop('disabled', true);
+			
+			var url = '${path}/checking/download';
+			var data = {};
+			data.orderDate = $('#detailAccountForm').find('input[name="orderDate"]').val();
+			data.bankType = $('#detailAccountForm').find('input[name="bankType"]:checked').val();
+			
+			$('#ctr_check_message').html('后台下载中......');
+			$.post(url, data, function(json){
+				$(_this).prop('disabled', false);
+				if (!json.success) {
+					$('#ctr_check_message').html(json.msg + json.data);
+					return;
+				}
+				$('#ctr_check_message').html('订单生成成功!' + json.data);
 			}, 'json');
 		}
 	</script>

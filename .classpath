@@ -25,11 +25,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/bankcomm-1.3.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/bcmail-jdk14-146.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/bcprov-jdk14-146.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/ISFJ_v2_0_1_127_5_BAISC_JDK14.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/newnetsign18.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/TrustPayClient-V3.0.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

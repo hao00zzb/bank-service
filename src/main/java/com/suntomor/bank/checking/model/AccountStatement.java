@@ -72,7 +72,20 @@ public class AccountStatement implements Serializable {
      */
     private Date createTime;
 
-    /**
+    @Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("AccountStatement [id=").append(id).append(", bankType=").append(bankType).append(", orderId=")
+				.append(orderId).append(", orderNumber=").append(orderNumber).append(", businessId=")
+				.append(businessId).append(", payerName=").append(payerName).append(", payerAccount=")
+				.append(payerAccount).append(", payTime=").append(payTime).append(", reconciliationTime=")
+				.append(reconciliationTime).append(", totalMoney=").append(totalMoney).append(", fundSource=")
+				.append(fundSource).append(", serialNumber=").append(serialNumber).append(", createTime=")
+				.append(createTime).append("]");
+		return builder.toString();
+	}
+
+	/**
      * @return t_account_statement.c_id 主键
      */
     public Integer getId() {
